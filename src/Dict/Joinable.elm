@@ -1,22 +1,53 @@
-module Dict.Joinable exposing (from, innerJoin, outerLeftJoin)
+module Dict.Joinable exposing (from, innerJoin, leftOuterJoin)
+
+{-| Let you create any joinable type easily.
+
+This is the api used for `Dict.OneToOne` and `Dict.ManyToOne` implementations.
+A good other container implementation would be a database table with a forward key in addition to the primary key.
+
+To make your container "joinable", you just need to provide a way to convert it into a `Dict`.
+Then add a `from`, `innerJoin` and (optionally) `outerLeftJoin` method like this:
+
+    from =
+        Dict.Joinable.from convertMyContainerToDict
+
+    innerJoin =
+        Dict.Joinable.innerJoin convertMyContainerToDict
+
+    outerLeftJoin =
+        Dict.Joinable.outerLeftJoin convertMyContainerToDict
+
+    convertMyContainerToDict : MyContainer a -> Dict comparable a
+    convertMyContainerToDict =
+        ...
+
+@docs from, innerJoin, leftOuterJoin
+
+-}
 
 import Dict exposing (Dict)
 import Maybe exposing (Maybe)
 
 
+{-| Equivalent to SQL `FROM`
+-}
 from : (joinable -> Dict comparable a) -> joinable -> (a -> result) -> Dict comparable result
 from toDict joinable func =
     Dict.map (\_ -> func) (toDict joinable)
 
 
+{-| Equivalent to SQL `INNER JOIN`
+-}
 innerJoin : (joinable -> Dict comparable a) -> joinable -> Dict comparable (a -> result) -> Dict comparable result
 innerJoin toDict joinable =
     andInnerMap (toDict joinable)
 
 
-outerLeftJoin : (joinable -> Dict comparable a) -> joinable -> Dict comparable (Maybe a -> result) -> Dict comparable result
-outerLeftJoin toDict joinable =
-    andOuterLeftMap (toDict joinable)
+{-| Equivalent to SQL `LEFT OUTER JOIN`
+-}
+leftOuterJoin : (joinable -> Dict comparable a) -> joinable -> Dict comparable (Maybe a -> result) -> Dict comparable result
+leftOuterJoin toDict joinable =
+    andLeftOuterMap (toDict joinable)
 
 
 
@@ -58,31 +89,31 @@ innerMerge func =
 -- Outer join
 
 
-andOuterLeftMap : Dict comparable a -> Dict comparable (Maybe a -> result) -> Dict comparable result
-andOuterLeftMap =
-    outerLeftMap2 (|>)
+andLeftOuterMap : Dict comparable a -> Dict comparable (Maybe a -> result) -> Dict comparable result
+andLeftOuterMap =
+    leftOuterMap2 (|>)
 
 
-outerLeftMap2 :
+leftOuterMap2 :
     (Maybe a -> b -> result)
     -> Dict comparable a
     -> Dict comparable b
     -> Dict comparable result
-outerLeftMap2 func dictA dictB =
-    outerLeftMerge
+leftOuterMap2 func dictA dictB =
+    leftOuterMerge
         (\entityId a b result -> Dict.insert entityId (func a b) result)
         dictA
         dictB
         Dict.empty
 
 
-outerLeftMerge :
+leftOuterMerge :
     (comparable -> Maybe a -> b -> result -> result)
     -> Dict comparable a
     -> Dict comparable b
     -> result
     -> result
-outerLeftMerge func =
+leftOuterMerge func =
     Dict.merge
         (\_ _ -> identity)
         (\key a b result -> func key (Just a) b result)

@@ -6,7 +6,8 @@
     "version": "0.1.0",
     "exposed-modules": [
         "Dict.OneToOne",
-        "Dict.ManyToOne"
+        "Dict.ManyToOne",
+        "Dict.Joinable"
     ],
     "elm-version": "0.19.1 <= v < 0.20.0",
     "dependencies": {

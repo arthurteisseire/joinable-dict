@@ -1,4 +1,10 @@
-module Dict.ManyToOne exposing (from, fromList, innerJoin, select)
+module Dict.ManyToOne exposing (fromList, from, innerJoin, select)
+
+{-| Joinable implementation of SQL many-to-one relation
+
+@docs fromList, from, innerJoin, select
+
+-}
 
 import Dict exposing (Dict)
 import Dict.Joinable
@@ -8,21 +14,29 @@ type ManyToOne comparable a
     = ManyToOne (List ( comparable, a ))
 
 
+{-| The way to init the container from a list of pair
+-}
 fromList : List ( comparable, a ) -> ManyToOne comparable a
 fromList =
     ManyToOne
 
 
+{-| Used for clarity only and match SQL queries
+-}
 select : a -> a
 select =
     identity
 
 
+{-| Equivalent to SQL `FROM`
+-}
 from : ManyToOne comparable a -> (List a -> result) -> Dict comparable result
 from =
     Dict.Joinable.from manyToOneToDict
 
 
+{-| Equivalent to SQL `INNER JOIN`
+-}
 innerJoin : ManyToOne comparable a -> Dict comparable (List a -> result) -> Dict comparable result
 innerJoin =
     Dict.Joinable.innerJoin manyToOneToDict
