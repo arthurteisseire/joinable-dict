@@ -1,6 +1,6 @@
 {
     "type": "package",
-    "name": "ArthurTeisseire/database",
+    "name": "ArthurTeisseire/joinable-dict",
     "summary": "A composable way of joining dictionaries",
     "license": "BSD-3-Clause",
     "version": "1.0.0",
