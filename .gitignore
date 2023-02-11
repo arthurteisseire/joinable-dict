@@ -1,0 +1,11 @@
+# Virtual env
+.envrc
+.direnv
+
+
+# Elm
+elm-stuff/
+
+
+# Jetbrains
+.idea
