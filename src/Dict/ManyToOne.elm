@@ -1,4 +1,4 @@
-module Dict.ManyToOne exposing (..)
+module Dict.ManyToOne exposing (from, fromList, innerJoin, select)
 
 import Dict exposing (Dict)
 
