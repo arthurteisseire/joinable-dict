@@ -8,6 +8,8 @@ A good other container implementation would be a database table with a forward k
 To make your container "joinable", you just need to provide a way to convert it into a `Dict`.
 Then add a `from`, `innerJoin` and (optionally) `leftOuterJoin` method like this:
 
+    import Dict.Joinable
+
     from =
         Dict.Joinable.from convertMyContainerToDict
 
