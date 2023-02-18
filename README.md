@@ -37,3 +37,14 @@ Join User and City dictionaries for matching ids in `Dict`:
             |> from db.users
             |> innerJoin db.cities
             |> innerJoin db.favoritePubs
+
+SQL Equivalent for `getUserWithCity` function:
+    
+    SELECT *
+    FROM users
+    INNER JOIN cities
+        ON users.id = cities.id
+    INNER JOIN favoritePubs
+        ON users.id = favoritePubs.id
+    
+Note that we always take `Dict` key for join match in this package so we don't use `ON` like SQL does.
