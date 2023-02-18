@@ -2,11 +2,11 @@ module Dict.Joinable exposing (from, innerJoin, leftOuterJoin)
 
 {-| Let you create any joinable type easily.
 
-This is the api used for `Dict.OneToOne` and `Dict.ManyToOne` implementations.
+This is the api used by `Dict.OneToOne` and `Dict.ManyToOne` implementations.
 A good other container implementation would be a database table with a forward key in addition to the primary key.
 
 To make your container "joinable", you just need to provide a way to convert it into a `Dict`.
-Then add a `from`, `innerJoin` and (optionally) `outerLeftJoin` method like this:
+Then add a `from`, `innerJoin` and (optionally) `leftOuterJoin` method like this:
 
     from =
         Dict.Joinable.from convertMyContainerToDict
@@ -14,8 +14,8 @@ Then add a `from`, `innerJoin` and (optionally) `outerLeftJoin` method like this
     innerJoin =
         Dict.Joinable.innerJoin convertMyContainerToDict
 
-    outerLeftJoin =
-        Dict.Joinable.outerLeftJoin convertMyContainerToDict
+    leftOuterJoin =
+        Dict.Joinable.leftOuterJoin convertMyContainerToDict
 
     convertMyContainerToDict : MyContainer a -> Dict comparable a
     convertMyContainerToDict =

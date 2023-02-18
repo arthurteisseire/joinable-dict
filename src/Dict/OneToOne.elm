@@ -32,7 +32,7 @@ innerJoin =
     Dict.Joinable.innerJoin identity
 
 
-{-| Equivalent to SQL LEFT `OUTER JOIN`
+{-| Equivalent to SQL `LEFT OUTER JOIN`
 -}
 leftOuterJoin : Dict comparable a -> Dict comparable (Maybe a -> result) -> Dict comparable result
 leftOuterJoin =
